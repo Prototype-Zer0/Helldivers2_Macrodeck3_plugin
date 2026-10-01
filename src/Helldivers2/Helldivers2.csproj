@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+<PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>Helldivers2</AssemblyName>
+    <RootNamespace>Helldivers2</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <UserSecretsId>Helldivers2-PluginDevelopment</UserSecretsId>
+</PropertyGroup>
+
+<ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+</ItemGroup>
+
+<ItemGroup>
+    <PackageReference Include="MacroDeck.Plugin.Analyzers" PrivateAssets="all" />
+    <PackageReference Include="MacroDeck.Localization" />
+    <PackageReference Include="MacroDeck.Plugin.Hosting" />
+    <PackageReference Include="MacroDeck.Plugin.Serilog" />
+    <PackageReference Include="MacroDeck.Sdk" />
+</ItemGroup>
+
+<ItemGroup>
+    <Content Include="manifest.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Assets\helldivers2.png" CopyToOutputDirectory="PreserveNewest" />
+
+    <Content Include="Localization\**\*.resx" CopyToOutputDirectory="PreserveNewest" />
+</ItemGroup>
+
+</Project>

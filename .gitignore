@@ -1,0 +1,109 @@
+================================
+.NET build output
+================================
+
+bin/
+obj/
+
+Publish/package output
+
+artifacts/
+publish/
+
+Generated NuGet/build files
+
+*.nupkg
+*.snupkg
+
+================================
+Visual Studio / Rider / VS Code
+================================
+
+.vs/
+.idea/
+.vscode/
+
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+Visual Studio Code workspace files
+
+*.code-workspace
+
+================================
+.NET / NuGet
+================================
+
+packages/
+.nuget/
+project.lock.json
+project.fragment.lock.json
+
+================================
+Logs
+================================
+
+*.log
+logs/
+Log/
+
+================================
+Local configuration / secrets
+================================
+
+.env
+.env.*
+!.env.example
+
+secrets/
+secrets.json
+appsettings.Local.json
+appsettings.Development.json
+
+User-specific development settings
+
+*.local.json
+
+================================
+OS files
+================================
+Windows
+
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+macOS
+
+.DS_Store
+
+Linux
+
+*~
+
+================================
+Temporary files
+================================
+
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+
+================================
+Macro Deck generated/local files
+================================
+
+*.macroDeckPlugin
+
+================================
+Test/local runtime data
+================================
+
+test-results/
+TestResults/
+coverage/
+coverage.opencover.xml

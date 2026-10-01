@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <data name="Actions.HelldiversStratagem.Name" xml:space="preserve">
+    <value>Helldivers 2 Stratagem</value>
+  </data>
+
+  <data name="Actions.HelldiversStratagem.Description" xml:space="preserve">
+    <value>Executes the selected Helldivers 2 stratagem input sequence.</value>
+  </data>
+
+  <data name="Actions.HelldiversStratagem.Selection.Label" xml:space="preserve">
+    <value>Stratagem</value>
+  </data>
+
+  <data name="Actions.HelldiversStratagem.Selection.Description" xml:space="preserve">
+    <value>Select the Helldivers 2 stratagem to execute.</value>
+  </data>
+
+  <data name="Actions.HelldiversStratagem.Selection.Placeholder" xml:space="preserve">
+    <value>Select a stratagem</value>
+  </data>
+</root>

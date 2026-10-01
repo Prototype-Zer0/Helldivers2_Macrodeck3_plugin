@@ -1,23 +1,25 @@
 ﻿using System.Collections.Immutable;
-using System.Windows.Forms;
 
-namespace Prototype.HellDivers2Strats.Core
+namespace Helldivers2.Core;
+
+public sealed class StratagemDefinition
 {
-    public class StratagemDefinition
+    public StratagemDefinition(
+        string id,
+        string displayName,
+        ImmutableArray<StratagemDirection> sequence
+    )
     {
-        public StratagemDefinition(string id, string displayName, ImmutableArray<Keys> sequence)
-        {
-            Id = id;
-            DisplayName = displayName;
-            Sequence = sequence;
-        }
-
-        public string Id { get; }
-
-        public string DisplayName { get; }
-
-        public ImmutableArray<Keys> Sequence { get; }
-
-        public override string ToString() => DisplayName;
+        Id = id;
+        DisplayName = displayName;
+        Sequence = sequence;
     }
+
+    public string Id { get; }
+
+    public string DisplayName { get; }
+
+    public ImmutableArray<StratagemDirection> Sequence { get; }
+
+    public override string ToString() => DisplayName;
 }

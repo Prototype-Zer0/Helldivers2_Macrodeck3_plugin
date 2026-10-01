@@ -1,0 +1,26 @@
+{
+  "$schema": "https://schemas.macro-deck.app/plugin-manifest-v1.schema.json",
+  "manifestVersion": 1,
+  "id": "stratagems.helldivers2",
+  "name": "Helldivers 2 Stratagems",
+  "version": "1.0.0",
+  "description": "Use Macro Deck to launch Helldivers 2 stratagems.",
+  "icon": "Assets/helldivers2.png",
+  "entrypoints": {
+    "win-x64": {
+      "executable": "runtimes/win-x64/Helldivers2.dll",
+      "runtime": {
+        "kind": "FrameworkDependent",
+        "dotnetVersion": "10.0"
+      }
+    }
+  },
+  "publisher": {
+    "name": "Prototype Zero"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/Prototype-Zer0/Helldivers2_Macrodeck3_plugin",
+  "compatibility": {
+    "macroDeck": ">=3.0.0-0"
+  }
+}
