@@ -1,236 +1,277 @@
-Helldivers 2 Stratagems — Macro Deck 3 Plugin
+# Helldivers 2 Macro Deck 3 Plugin
 
-A Macro Deck 3
- plugin for executing Helldivers 2 stratagem input sequences from Macro Deck.
+A Macro Deck 3 plugin for executing Helldivers 2 stratagems from Macro Deck. The plugin provides a selectable list of Helldivers 2 stratagems and sends the corresponding directional input sequence when the action is triggered.
 
-Platform: Windows
-Target framework: .NET 10
-Macro Deck: 3.x
+---
 
-Features
+## Requirements
 
-Execute Helldivers 2 stratagems directly from Macro Deck.
+* **Macro Deck 3**
+* **.NET 10 SDK**
+* **Windows** (required for the current `user32.dll` keyboard input implementation)
+* The Macro Deck 3 SDK packages used by the project
 
-Select the desired stratagem through a Macro Deck action parameter.
+The plugin currently targets:
+```xml
+net10.0
+```
 
-Supports the standard Helldivers 2 directional stratagem inputs.
+---
 
-Uses randomized input timing between key presses.
+## Repository Structure
 
-Includes localization infrastructure for future translations.
-
-Packaged as a .macroDeckPlugin file for installation.
-
-Requirements
-
-To build the plugin, install:
-
-.NET 10 SDK
-
-Macro Deck 3
-
-The plugin currently targets Windows because keyboard input is implemented through the Windows user32.dll keyboard API.
-
-Cross-platform support may be added in the future.
-
-Repository Structure
+```text
 .
 ├── Directory.Build.props
 ├── Directory.Packages.props
 ├── NuGet.config
+├── .gitignore
 ├── README.md
-└── src/
-    └── Helldivers2/
-        ├── Actions/
-        ├── Assets/
-        ├── Core/
-        ├── Localization/
+└── src
+    └── Helldivers2
+        ├── Actions
+        │   └── HelldiversStratagemAction.cs
+        ├── Assets
+        │   └── helldivers2.png
+        ├── Core
+        │   ├── StratagemDefinition.cs
+        │   ├── StratagemDirection.cs
+        │   ├── StratagemExecutor.cs
+        │   └── StratagemRegistry.cs
+        ├── Localization
+        │   └── Strings.resx
         ├── Helldivers2.csproj
+        ├── PluginIntegration.cs
+        ├── Program.cs
         ├── macrodeck-build.json
         └── manifest.json
+```
 
+---
 
-Build output is intentionally excluded from source control.
+## Building
 
-Clone the Repository
-git clone <repository-url>
-cd Helldivers2_Macrodeck3_plugin
+1. Clone the repository and change into the plugin project directory:
+   ```bash
+   cd src\Helldivers2
+   ```
 
-Restore Dependencies
+2. Build the project:
+   ```bash
+   dotnet build
+   ```
 
-From the repository root:
+A successful build should produce output similar to:
+```text
+Restore complete
+Helldivers2 net10.0 succeeded
+Build succeeded
+```
 
+The compiled plugin assembly will be located under:
+```text
+bin\Debug\net10.0\
+```
+
+---
+
+## Publishing
+
+For a Release publish:
+```bash
+dotnet publish
+```
+
+The published files will be placed under:
+```text
+bin\Release\net10.0\publish\
+```
+
+The publish directory contains the plugin executable, assemblies, manifest, assets, and localization files required by the plugin.
+
+---
+
+## Creating a Macro Deck Plugin Package
+
+The repository uses the Macro Deck plugin build configuration located in:
+```text
+src\Helldivers2\macrodeck-build.json
+```
+
+After installing the Macro Deck plugin tooling, run:
+```bash
+macrodeck-plugin build --source . --output .\artifacts
+```
+
+This command builds the configured runtime target and creates a `.macroDeckPlugin` package in the `artifacts` directory, for example:
+```text
+artifacts\
+└── stratagems.helldivers2-1.0.0.macroDeckPlugin
+```
+This file is your installable Macro Deck plugin package.
+
+---
+
+## Runtime Targets
+
+The build configuration currently defines the following targets:
+* `win-x64`
+* `osx-arm64`
+* `linux-x64`
+
+> **Note:** The project currently contains Windows-specific keyboard input code, so only the Windows target is functional at this time. macOS and Linux targets are included in the packaging configuration for future cross-platform support.
+
+---
+
+## Installing the Plugin
+
+Once the `.macroDeckPlugin` package has been created, install it directly through Macro Deck. 
+The package contains the plugin manifest and published files required by Macro Deck. The plugin manifest itself is located at:
+```text
+src\Helldivers2\manifest.json
+```
+
+---
+
+## Adding or Modifying Stratagems
+
+Stratagem definitions are maintained in:
+```text
+src\Helldivers2\Core\StratagemRegistry.cs
+```
+
+Each stratagem consists of:
+* An identifier
+* A display name
+* A directional input sequence
+
+The available directions are defined by:
+```text
+src\Helldivers2\Core\StratagemDirection.cs
+```
+
+The enum currently contains:
+```csharp
+public enum StratagemDirection
+{
+    Up,
+    Down,
+    Left,
+    Right,
+}
+```
+The executor converts these directions into keyboard input whenever a stratagem action is triggered.
+
+---
+
+## Localization
+
+Localization resources are stored under:
+```text
+src\Helldivers2\Localization\
+```
+* **Default resource file:** `Strings.resx`
+
+Additional translations can be added using the standard `.resx` naming convention:
+* `Strings.de.resx`
+* `Strings.fr.resx`
+* `Strings.pt-BR.resx`
+
+The Macro Deck localization source generator automatically generates the strongly typed `Strings` class during the build process.
+
+---
+
+## Configuration
+
+Package versions are managed centrally in:
+```text
+Directory.Packages.props
+```
+
+The project uses the `MacroDeckSdkVersion` property to control the Macro Deck SDK package version. The default configuration uses:
+```xml
+<MacroDeckSdkVersion>3.0.0-*</MacroDeckSdkVersion>
+```
+
+A specific SDK version can also be supplied during a build:
+```bash
+dotnet build -p:MacroDeckSdkVersion=3.0.0
+```
+
+### Local Macro Deck SDK Builds
+`NuGet.config` includes a local package feed:
+```text
+./local-feed
+```
+This can be used when developing against an unreleased or locally built Macro Deck SDK. Place locally built NuGet packages in `local-feed\` and build the project normally.
+
+---
+
+## Cleaning the Project
+
+To remove generated build output:
+```bash
+dotnet clean
+```
+
+To completely remove the generated `bin` and `obj` directories:
+```powershell
+Get-ChildItem -Path . -Directory -Recurse -Force |
+    Where-Object { $_.Name -in @("bin", "obj") } |
+    Remove-Item -Recurse -Force
+```
+
+After cleaning, restore and build again:
+```bash
 dotnet restore
+dotnet build
+```
 
+---
 
-NuGet package versions are centrally managed through Directory.Packages.props.
+## Git and Generated Files
 
-Compile
+Build output and generated files should not be committed to the repository. Specifically, the following directories are generated and ignored:
+* `bin\`
+* `obj\`
+* `artifacts\`
 
-Navigate to the plugin project:
+The repository `.gitignore` contains the project-specific exclusions.
 
+---
+
+## Development Workflow
+
+A typical development cycle looks like this:
+```bash
 cd src\Helldivers2
 
-
-Then build:
-
-dotnet build
-
-
-For a Release build:
-
-dotnet build -c Release
-
-
-The compiled assembly will be placed under:
-
-src/Helldivers2/bin/Release/net10.0/
-
-Publish
-
-To create a normal Release publish directory:
-
-dotnet publish
-
-
-The default output will be under:
-
-src/Helldivers2/bin/Release/net10.0/publish/
-
-
-The published directory contains the plugin executable, assemblies, manifest, assets, and localization files required by the plugin.
-
-Build a Macro Deck Plugin Package
-
-The repository uses the Macro Deck plugin build configuration in macrodeck-build.json.
-
-Install the Macro Deck plugin CLI if it is not already available, then verify it is accessible:
-
-macrodeck-plugin --version
-
-
-From the plugin directory, build the installable package with:
-
-macrodeck-plugin build --source . --output .\artifacts
-
-
-A successful build produces a file similar to:
-
-artifacts/
-└── stratagems.helldivers2-1.0.0.macroDeckPlugin
-
-
-The .macroDeckPlugin file is the distributable/installable plugin package.
-
-Target Platforms
-
-The build configuration currently defines these targets:
-
-win-x64
-
-osx-arm64
-
-linux-x64
-
-The plugin's actual stratagem keyboard execution is currently Windows-specific. The non-Windows targets are therefore placeholders for future cross-platform implementation.
-
-Installing the Plugin
-
-After creating the .macroDeckPlugin package, install it through Macro Deck 3 using the plugin installation mechanism.
-
-The package contains the plugin manifest and published runtime files required by Macro Deck.
-
-Updating the Version
-
-The plugin version is defined in:
-
-src/Helldivers2/manifest.json
-
-
-For example:
-
-"version": "1.0.0"
-
-
-Update this value when preparing a new release.
-
-After changing the version, rebuild the package:
-
-macrodeck-plugin build --source . --output .\artifacts
-
-
-The resulting package will use the version from manifest.json.
-
-Localization
-
-Localization resources live in:
-
-src/Helldivers2/Localization/
-
-
-The default resource file is:
-
-Strings.resx
-
-
-Additional languages can be added using the appropriate culture suffix, for example:
-
-Strings.de.resx
-Strings.pt-BR.resx
-
-
-The Macro Deck localization source generator creates the strongly typed Strings class during compilation.
-
-Generated files should not be committed to the repository.
-
-Building Against a Local Macro Deck SDK
-
-The repository supports overriding the centrally managed Macro Deck SDK version.
-
-For example:
-
-dotnet build -p:MacroDeckSdkVersion=3.0.0
-
-
-If using a locally packed SDK, place the package in:
-
-local-feed/
-
-
-The local feed is intentionally ignored by Git.
-
-This allows development against an unreleased/local Macro Deck SDK without committing local NuGet packages to the repository.
-
-Clean Build
-
-If the build gets into an unexpected state, clean the generated files:
-
-dotnet clean
-
-
-For a more thorough cleanup, remove bin and obj:
-
-Remove-Item -Recurse -Force .\bin, .\obj -ErrorAction SilentlyContinue
-
-
-Then restore and build again:
-
 dotnet restore
 dotnet build
+dotnet publish
+macrodeck-plugin build --source . --output .\artifacts
+```
+The final installable package can then be found in the `artifacts\` folder.
 
-Git / Generated Files
+---
 
-The following directories are generated and should not be committed:
+## Current Limitations
 
-**/bin/
-**/obj/
-**/publish/
-**/artifacts/
-local-feed/
+* Keyboard input is currently implemented using Windows APIs (`user32.dll`).
+* macOS support is not currently implemented.
+* Linux/BSD support is not currently implemented.
+* The plugin currently targets .NET 10.
+* Cross-platform input support will require platform-specific input modules.
 
+---
 
-Build configuration, source code, manifests, localization resources, and plugin assets should remain tracked.
+## License
 
-License
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for the full license text.
 
-This project is licensed under the MIT License.
+---
+
+## Repository
+
+Source code and development history are available on GitHub:
+[https://github.com/Prototype-Zer0/Helldivers2_Macrodeck3_plugin](https://github.com/Prototype-Zer0/Helldivers2_Macrodeck3_plugin)
